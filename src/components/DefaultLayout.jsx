@@ -49,7 +49,7 @@ import { useSelector } from 'react-redux';
               {
                 key: '3',
                 icon: <UnorderedListOutlined/>,
-                label: <Link to='/home'>Items</Link>,
+                label: <Link to='/items'>Items</Link>,
               },
               {
                 key: '4',
