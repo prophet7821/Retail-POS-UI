@@ -12,11 +12,13 @@ import {
   import React, { useState } from 'react';
   import '../resources/layout.css';
   import {Link} from 'react-router-dom'
+import { useSelector } from 'react-redux';
   
   const { Header, Sider, Content } = Layout;
   
   const App= (props) => {
     const [collapsed, setCollapsed] = useState(false);
+    const {cartItems} = useSelector(state=>state.rootReducer)
   
     return (
       <Layout>
@@ -61,6 +63,10 @@ import {
               className: 'trigger',
               onClick: () => setCollapsed(!collapsed),
             })}
+            <div className='cart-count d-flex align-items-center'>
+              <b><p className='mt-3 mr-2'>{cartItems.length}</p></b>
+              <ShoppingCartOutlined/>
+            </div>
           </Header>
           <Content
             className="site-layout-background"

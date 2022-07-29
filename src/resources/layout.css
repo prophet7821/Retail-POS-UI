@@ -45,6 +45,7 @@
     display:flex;
     align-items: center;
     border-radius: 5px;
+    justify-content: space-between;
   }
 
   .logo h3{
