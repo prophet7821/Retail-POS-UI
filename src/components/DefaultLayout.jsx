@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -8,20 +9,26 @@ import {
   LoginOutlined,
   ShoppingCartOutlined,
   } from '@ant-design/icons';
-  import { Layout, Menu } from 'antd';
+  import { Layout, Menu ,Spin} from 'antd';
   import React, { useState } from 'react';
   import '../resources/layout.css';
-  import {Link} from 'react-router-dom'
+  import {Link ,useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux';
   
   const { Header, Sider, Content } = Layout;
   
   const App= (props) => {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
-    const {cartItems} = useSelector(state=>state.rootReducer)
-  
+    const {cartItems,loading} = useSelector(state=>state.rootReducer)
+
+    useEffect(() => {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems))
+    }, [cartItems])
+    
     return (
       <Layout>
+        {loading && <Spin/>}
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="logo"><h3>Sam POS</h3></div>
           <Menu
@@ -63,7 +70,7 @@ import { useSelector } from 'react-redux';
               className: 'trigger',
               onClick: () => setCollapsed(!collapsed),
             })}
-            <div className='cart-count d-flex align-items-center'>
+            <div className='cart-count d-flex align-items-center' onClick={()=>{navigate('/cart')}}>
               <b><p className='mt-3 mr-2'>{cartItems.length}</p></b>
               <ShoppingCartOutlined/>
             </div>
