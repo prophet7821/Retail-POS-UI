@@ -64,3 +64,26 @@
   .cart-count{
     cursor:pointer;
   }
+
+  .ant-layout-content{
+    height:80vh;
+    overflow-y:scroll;
+  }
+  .category{
+    border: 2px solid rgba(0,0,0,0.4) ;
+    margin-right:50px;
+    padding-left: 25px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .category h4{
+    margin-right: 24px;
+  }
+  .category img{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin:-3px;
+  }
+ .selectedcategory{
+  border: 2px solid #000;
+ }

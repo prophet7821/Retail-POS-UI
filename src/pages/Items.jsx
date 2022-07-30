@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import axios from "axios";
-import { Row, Col, Table, Button, message ,Modal, Form, Input, Select } from "antd";
+import {
+  Row,
+  Col,
+  Table,
+  Button,
+  message,
+  Modal,
+  Form,
+  Input,
+  Select,
+} from "antd";
 import { useDispatch } from "react-redux";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const Items = () => {
   const [itemData, setItemData] = useState([]);
   const [addEditModalOpen, setAddEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
   const dispatch = useDispatch();
 
-  const getAllItems=()=>{
+  const getAllItems = () => {
     dispatch({ type: "showLoading" });
     axios
       .get("http://localhost:5000/api/items/get-all-items")
@@ -22,7 +33,23 @@ const Items = () => {
         dispatch({ type: "hideLoading" });
         console.log(error);
       });
-  }
+  };
+
+  const deleteItem = (record) => {
+    dispatch({ type: "showLoading" });
+    axios
+      .post("http://localhost:5000/api/items/delete-item",{itemid:record._id})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Item deleted successfully')
+        getAllItems();
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error('Something went wrong');
+        console.log(error);
+      });
+  };
   useEffect(() => {
     getAllItems();
   }, []);
@@ -52,29 +79,55 @@ const Items = () => {
       dataIndex: "_id",
       render: (id, record) => (
         <div className="d-flex">
-          <DeleteOutlined className="mx-2" />
-          <EditOutlined className="mx-2" />
+          <EditOutlined
+            className="mx-2"
+            onClick={() => {
+              setEditingItem(record);
+              setAddEditModalOpen(true);
+            }}
+          />
+          <DeleteOutlined className="mx-2" onClick={()=>{deleteItem(record)}}/>
         </div>
       ),
     },
   ];
 
-  const onFinish=(values)=>{
+  const onFinish = (values) => {
     dispatch({ type: "showLoading" });
-    axios
-      .post("http://localhost:5000/api/items/add-item",values)
-      .then((response) => {
-        dispatch({ type: "hideLoading" });
-        message.success('Item added sucessfully');
-        setAddEditModalOpen(false);
-        getAllItems();
-      })
-      .catch((error) => {
-        dispatch({ type: "hideLoading" });
-        message.error("Something went wrong");
-        console.log(error);
-      });
-  }
+    if (editingItem == null) {
+      axios
+        .post("http://localhost:5000/api/items/add-item", values)
+        .then((response) => {
+          dispatch({ type: "hideLoading" });
+          message.success("Item added sucessfully");
+          setAddEditModalOpen(false);
+          getAllItems();
+        })
+        .catch((error) => {
+          dispatch({ type: "hideLoading" });
+          message.error("Something went wrong");
+          console.log(error);
+        });
+    } else {
+      axios
+        .post("http://localhost:5000/api/items/edit-item", {
+          ...values,
+          itemid: editingItem._id,
+        })
+        .then((response) => {
+          dispatch({ type: "hideLoading" });
+          message.success("Item edited sucessfully");
+          setEditingItem(null)
+          setAddEditModalOpen(false);
+          getAllItems();
+        })
+        .catch((error) => {
+          dispatch({ type: "hideLoading" });
+          message.error("Something went wrong");
+          console.log(error);
+        });
+    }
+  };
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
@@ -89,38 +142,45 @@ const Items = () => {
         </Button>
       </div>
       <Table columns={columns} dataSource={itemData} bordered />
-      <Modal
-        onCancel={() => {
-          setAddEditModalOpen(false);
-        }}
-        visible={addEditModalOpen}
-        title="Add New Item"
-        footer={false}
-      >
-        <Form layout="vertical" onFinish={onFinish}>
-          <Form.Item name="name" label="Name">
-            <Input />
-          </Form.Item>
-          <Form.Item name="price" label="Price">
-            <Input />
-          </Form.Item>
-          <Form.Item name="image" label="Image URL">
-            <Input />
-          </Form.Item>
-          <Form.Item name="category" label="Category">
-            <Select>
-              <Select.Option value="fruits">Fruits</Select.Option>
-              <Select.Option value="vegetables">Vegetables</Select.Option>
-              <Select.Option value="meat">Meat</Select.Option>
-            </Select>
-          </Form.Item>
-          <div className="d-flex justify-content-end">
-            <Button htmlType="submit" type="primary">
-              Save
-            </Button>
-          </div>
-        </Form>
-      </Modal>
+      {addEditModalOpen && (
+        <Modal
+          onCancel={() => {
+            setEditingItem(null);
+            setAddEditModalOpen(false);
+          }}
+          visible={addEditModalOpen}
+          title={`${editingItem !== null ? "Edit Item" : "Add New Item"}`}
+          footer={false}
+        >
+          <Form
+            initialValues={editingItem}
+            layout="vertical"
+            onFinish={onFinish}
+          >
+            <Form.Item name="name" label="Name">
+              <Input />
+            </Form.Item>
+            <Form.Item name="price" label="Price">
+              <Input />
+            </Form.Item>
+            <Form.Item name="image" label="Image URL">
+              <Input />
+            </Form.Item>
+            <Form.Item name="category" label="Category">
+              <Select>
+                <Select.Option value="fruits">Fruits</Select.Option>
+                <Select.Option value="vegetables">Vegetables</Select.Option>
+                <Select.Option value="meat">Meat</Select.Option>
+              </Select>
+            </Form.Item>
+            <div className="d-flex justify-content-end">
+              <Button htmlType="submit" type="primary">
+                Save
+              </Button>
+            </div>
+          </Form>
+        </Modal>
+      )}
     </DefaultLayout>
   );
 };
