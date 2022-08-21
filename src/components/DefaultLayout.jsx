@@ -46,7 +46,7 @@ const App = (props) => {
             {
               key: "2",
               icon: <CopyOutlined />,
-              label: <Link to="/home">Bills</Link>,
+              label: <Link to="/bills">Bills</Link>,
             },
             {
               key: "3",
@@ -56,7 +56,7 @@ const App = (props) => {
             {
               key: "4",
               icon: <UserOutlined />,
-              label: <Link to="/home">Customers</Link>,
+              label: <Link to="/customers">Customers</Link>,
             },
             {
               key: "5",

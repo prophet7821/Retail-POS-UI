@@ -7,6 +7,8 @@ import Items from "./pages/Items";
 import CartPage from "./pages/CartPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Bills from "./pages/Bills";
+import Customers from "./pages/Customers";
 
 const App = () => {
   return (
@@ -34,6 +36,22 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <CartPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bills"
+            element={
+              <ProtectedRoute>
+                <Bills />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customers"
+            element={
+              <ProtectedRoute>
+                <Customers />
               </ProtectedRoute>
             }
           />
