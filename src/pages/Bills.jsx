@@ -15,7 +15,7 @@ function Bills() {
   const getAllBills = () => {
     dispatch({ type: "showLoading" });
     axios
-      .get("http://localhost:5000/api/bills/get-all-bills")
+      .get("https://starseed-pos-server.herokuapp.com/api/bills/get-all-bills")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         const data = response.data

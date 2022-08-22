@@ -30,7 +30,7 @@ const Homepage = () => {
   useEffect(() => {
     dispatch({ type: "showLoading" });
     axios
-      .get("http://localhost:5000/api/items/get-all-items")
+      .get("https://starseed-pos-server.herokuapp.com/api/items/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setItemData(response.data);

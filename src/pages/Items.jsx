@@ -24,7 +24,7 @@ const Items = () => {
   const getAllItems = () => {
     dispatch({ type: "showLoading" });
     axios
-      .get("http://localhost:5000/api/items/get-all-items")
+      .get("https://starseed-pos-server.herokuapp.com/api/items/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setItemData(response.data);
@@ -38,7 +38,7 @@ const Items = () => {
   const deleteItem = (record) => {
     dispatch({ type: "showLoading" });
     axios
-      .post("http://localhost:5000/api/items/delete-item",{itemid:record._id})
+      .post("https://starseed-pos-server.herokuapp.com/api/items/delete-item",{itemid:record._id})
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Item deleted successfully')
@@ -96,7 +96,7 @@ const Items = () => {
     dispatch({ type: "showLoading" });
     if (editingItem == null) {
       axios
-        .post("http://localhost:5000/api/items/add-item", values)
+        .post("https://starseed-pos-server.herokuapp.com/api/items/add-item", values)
         .then((response) => {
           dispatch({ type: "hideLoading" });
           message.success("Item added sucessfully");
@@ -110,7 +110,7 @@ const Items = () => {
         });
     } else {
       axios
-        .post("http://localhost:5000/api/items/edit-item", {
+        .post("https://starseed-pos-server.herokuapp.com/api/items/edit-item", {
           ...values,
           itemid: editingItem._id,
         })

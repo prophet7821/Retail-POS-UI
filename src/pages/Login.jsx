@@ -7,7 +7,7 @@ const Login = () => {
   const navigate = useNavigate();
   const onFinish = (values) => {
     axios
-      .post("http://localhost:5000/api/users/login", values)
+      .post("https://starseed-pos-server.herokuapp.com/api/users/login", values)
       .then((res) => {
         message.success("Successfull");
         localStorage.setItem("pos-user", JSON.stringify(res.data));

@@ -39,7 +39,7 @@ const CartPage = () => {
     }
     // console.log(reqObj)
     axios
-      .post("http://localhost:5000/api/bills/charge-bill", reqObj)
+      .post("https://starseed-pos-server.herokuapp.com/api/bills/charge-bill", reqObj)
       .then(() => {
         message.success("Bill Charged Successfully");
         navigate('/home')

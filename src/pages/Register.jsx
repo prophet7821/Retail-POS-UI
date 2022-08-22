@@ -10,7 +10,7 @@ const Register = () => {
 
   const onFinish = (values) => {
     axios
-      .post("http://localhost:5000/api/users/register",values)
+      .post("https://starseed-pos-server.herokuapp.com/api/users/register",values)
       .then((res) => message.success("Successfull"))
       .catch((err) => message.error("Error registering"));
   };
